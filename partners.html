@@ -16,6 +16,7 @@
   .mch7:hover{background:transparent !important;color:#222 !important}
 </style>
 <script src="./support.js"></script>
+<script src="./visits.js"></script>
 </head>
 <body>
 <x-dc>
@@ -217,7 +218,7 @@
         </div>
       </div>
       <div style="margin-top:clamp(28px,3.2vw,44px);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(243,238,230,.45)">
-        <span>{{ t.footer.rights }}</span>
+        <span>{{ t.footer.rights }}<span style="margin-left:18px">{{ visits }}</span></span>
         <span>Seoul · Worldwide sourcing</span>
       </div>
     </div>
@@ -227,9 +228,10 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 1280, "height": 3000}, "defaultLanguage": {"editor": "enum", "options": ["en", "it", "ko"], "default": "en", "tsType": "&#39;en&#39;|&#39;it&#39;|&#39;ko&#39;"}, "playIntro": {"editor": "boolean", "default": false}, "formspreeId": {"editor": "text", "default": ""}}'>
 class Component extends DCLogic {
-  state = { lang: "en", cat: "all", intro: true, q: "", ctype: "", company: "", name: "", email: "", phone: "", country: "", message: "", showErr: false, sending: false, sent: false, sendFailed: false, fileList: [] };
+  state = { visits: "", lang: "en", cat: "all", intro: true, q: "", ctype: "", company: "", name: "", email: "", phone: "", country: "", message: "", showErr: false, sending: false, sent: false, sendFailed: false, fileList: [] };
 
   componentDidMount() {
+    if (window.mcVisits) window.mcVisits().then((v) => this.setState({ visits: v })).catch(() => {});
     this._hdrScroll = () => {
       try {
         const h = document.querySelector("header.mc-header");
@@ -709,6 +711,7 @@ class Component extends DCLogic {
     const PTL = { ko: { pre: "한국 시장으로 가는 ", hl: "확실한 파트너", post: "" }, en: { pre: "Your ", hl: "partner", post: " in the Korean market" }, it: { pre: "Il vostro ", hl: "partner", post: " per il mercato coreano" } };
     const ptl = PTL[lang] || PTL.en;
     return {
+      visits: this.state.visits,
       ptl,
       pp: t.partnersPage, tl: t.timeline,
       cp, on, form, typeCards, typePlaceholder, formMail, onSend, showErr, sendLabel, sent, sendFailed, onFiles, fileRows, hasFiles, tooBig, filesTotal: fmtSize(totalBytes),

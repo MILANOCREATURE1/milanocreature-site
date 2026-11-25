@@ -19,6 +19,7 @@
   .mch10:hover{background:#221E1A !important;color:#F3EEE6 !important}
 </style>
 <script src="./support.js"></script>
+<script src="./visits.js"></script>
 </head>
 <body>
 <x-dc>
@@ -415,7 +416,7 @@
         </div>
       </div>
       <div style="margin-top:clamp(28px,3.2vw,44px);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(243,238,230,.45)">
-        <span>{{ t.footer.rights }}</span>
+        <span>{{ t.footer.rights }}<span style="margin-left:18px">{{ visits }}</span></span>
         <span>Seoul · Worldwide sourcing</span>
       </div>
     </div>
@@ -425,9 +426,10 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 1280, "height": 7200}, "defaultLanguage": {"editor": "enum", "options": ["en", "it", "ko"], "default": "en", "tsType": "&#39;en&#39;|&#39;it&#39;|&#39;ko&#39;"}, "playIntro": {"editor": "boolean", "default": true}}'>
 class Component extends DCLogic {
-  state = { lang: "en", cat: "all", intro: true, q: "" };
+  state = { visits: "", lang: "en", cat: "all", intro: true, q: "" };
 
   componentDidMount() {
+    if (window.mcVisits) window.mcVisits().then((v) => this.setState({ visits: v })).catch(() => {});
     this._anchorClick = (e) => {
       try {
         const a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
@@ -925,6 +927,7 @@ class Component extends DCLogic {
     const heroScrollStyle = Object.assign({ width: "100%", boxSizing: "border-box", margin: "0", padding: "0 clamp(18px,3vw,48px) clamp(26px,3vw,40px)", display: "flex", alignItems: "center", justifyContent: "center", gap: "11px" }, anim("1.2s", "3.5s"));
 
     return {
+      visits: this.state.visits,
       pp: t.partnersPage, tl: t.timeline,
       leadStyle,
       t, intro, heroLogoStyle, heroSubStyle, heroSubWrap, heroScrollStyle,
