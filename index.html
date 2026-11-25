@@ -429,7 +429,7 @@ class Component extends DCLogic {
   state = { visits: "", lang: "en", cat: "all", intro: true, q: "" };
 
   componentDidMount() {
-    if (window.mcVisits) window.mcVisits().then((v) => this.setState({ visits: v })).catch(() => {});
+    if (window.mcVisits) window.mcVisits((v) => this.setState({ visits: v }));
     this._anchorClick = (e) => {
       try {
         const a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
